@@ -3,6 +3,8 @@ import React, { useRef, useState } from "react";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/utils/cn";
+import { WalletMultiButton } from "@solana/wallet-adapter-react-ui";
+import { useConnection, useWallet } from "@solana/wallet-adapter-react";
 
 export function TokenCreationForm() {
   const tokenName = useRef<HTMLInputElement>(null);
@@ -12,6 +14,10 @@ export function TokenCreationForm() {
   const [tokenNameValue, setTokenNameValue] = useState("");
   const [tokenSymbolValue, setTokenSymbolValue] = useState("");
   const [tokenDescriptionValue, setTokenDescriptionValue] = useState("");
+  const [balance, setBalance] = useState(0);
+
+  const { connection } = useConnection();
+  const wallet = useWallet();
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -25,7 +31,7 @@ export function TokenCreationForm() {
       <p className="text-neutral-600 text-sm max-w-sm mt-2 dark:text-neutral-300">
         Launch you token on Solana blockchain in minutes!
       </p>
-
+      <WalletMultiButton />
       <form className="my-8" onSubmit={handleSubmit}>
         <div className="flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-2 mb-4">
           <LabelInputContainer>
@@ -39,12 +45,22 @@ export function TokenCreationForm() {
           </LabelInputContainer>
           <LabelInputContainer>
             <Label htmlFor="lastname">Token Symbol</Label>
-            <Input id="lastname" placeholder="TT" type="text" ref={tokenSymbol} />
+            <Input
+              id="lastname"
+              placeholder="TT"
+              type="text"
+              ref={tokenSymbol}
+            />
           </LabelInputContainer>
         </div>
         <LabelInputContainer className="mb-4">
           <Label htmlFor="email">Token Description</Label>
-          <Input id="email" placeholder="Token Metadata" type="text" ref={tokenDescription} />
+          <Input
+            id="email"
+            placeholder="Token Metadata"
+            type="text"
+            ref={tokenDescription}
+          />
         </LabelInputContainer>
 
         <button
