@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { cn } from "@/utils/cn";
 import { WalletMultiButton } from "@solana/wallet-adapter-react-ui";
 import { useConnection, useWallet } from "@solana/wallet-adapter-react";
+import { LAMPORTS_PER_SOL } from "@solana/web3.js";
 
 export function TokenCreationForm() {
   const tokenName = useRef<HTMLInputElement>(null);
@@ -19,19 +20,41 @@ export function TokenCreationForm() {
   const { connection } = useConnection();
   const wallet = useWallet();
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  if (connection && wallet.publicKey) {
+    connection.getAccountInfo(wallet.publicKey).then((info) => {
+      if (info?.lamports != null) {
+        setBalance(info?.lamports / LAMPORTS_PER_SOL);
+      } else console.log("No money :(");
+    });
+  }
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log("Form submitted");
+    if (!connection || !wallet.publicKey) {
+      return;
+    }
+    console.log("Pubkey", wallet.publicKey);
+
+    // Checking the connected wallet's SOL balance
+    await connection.getAccountInfo(wallet.publicKey).then((info) => {
+      if (info?.lamports != null) {
+        setBalance(info?.lamports / LAMPORTS_PER_SOL);
+      } else {
+        alert("0 balance");
+      }
+    });
   };
   return (
     <div className="max-w-md w-full mx-auto my-28 rounded-none md:rounded-2xl p-4 md:p-8 shadow-input bg-white dark:bg-black">
       <h2 className="font-bold text-xl text-neutral-800 dark:text-neutral-200">
-        Welcome to TokenX
+        Welcome to Token
+        <span className=" text-red-500 font-extrabold text-xl">X</span>
       </h2>
       <p className="text-neutral-600 text-sm max-w-sm mt-2 dark:text-neutral-300">
         Launch you token on Solana blockchain in minutes!
       </p>
       <WalletMultiButton />
+      {balance && <div className=" my-3 text-white">Wallet Balance: {balance}</div>}
       <form className="my-8" onSubmit={handleSubmit}>
         <div className="flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-2 mb-4">
           <LabelInputContainer>
