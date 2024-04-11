@@ -2,8 +2,7 @@
 import React from "react";
 import { motion } from "framer-motion";
 import { LampContainer } from "@/components/ui/lamp";
-import { HoverBorderGradient } from "@/components/ui/hover-border-gradient";
-import { useRouter } from 'next/router';
+import { useRouter } from "next/router";
 
 export default function Home() {
   const router = useRouter();
@@ -25,7 +24,7 @@ export default function Home() {
           Tokens Effortlessly! <br />
           <button
             className="mt-4 px-8 py-2 hover:shadow-cyan-600 hover:text-cyan-500 hover:shadow-md text-slate-300 font-thin border-cyan-500 border-2 transition-all text-lg"
-            onClick={() => router.push('/token-creation')}
+            onClick={() => router.push("/token-creation")}
           >
             {" "}
             Try Now{" "}

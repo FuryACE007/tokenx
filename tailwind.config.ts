@@ -13,7 +13,7 @@ module.exports = {
     // Or if using `src` directory:
     "./src/**/*.{js,ts,jsx,tsx,mdx}",
   ],
-  darkMode: "class",
+  darkMode: 'media', // or 'class' if you prefer to control dark mode through a class
   theme: {
     extend: {
       boxShadow: {
