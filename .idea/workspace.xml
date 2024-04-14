@@ -1,7 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="b921bce8-99b3-4638-bffe-b59e04c43013" name="Changes" comment="" />
+    <list default="true" id="b921bce8-99b3-4638-bffe-b59e04c43013" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pnpm-lock.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/pnpm-lock.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/ui/forms/token-creation-form.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ui/forms/token-creation-form.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/utils/libs/libs.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/utils/libs/libs.ts" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -10,9 +15,9 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="ProjectColorInfo"><![CDATA[{
-  "associatedIndex": 1
-}]]></component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 1
+}</component>
   <component name="ProjectId" id="2exJHrF7mu7o8hi5wPuHRXGXOjC" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
@@ -21,7 +26,7 @@
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
     "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "feature/add-token-page",
+    "git-widget-placeholder": "feature/create-token",
     "kotlin-language-version-configured": "true",
     "last_opened_file_path": "/Users/sudhanshushekhar/Desktop/projects/tokenx",
     "node.js.detected.package.eslint": "true",
@@ -48,6 +53,7 @@
       <option name="presentableId" value="Default" />
       <updated>1712840211312</updated>
       <workItem from="1712840212307" duration="56000" />
+      <workItem from="1712903819538" duration="8000" />
     </task>
     <servers />
   </component>

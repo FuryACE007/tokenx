@@ -6,6 +6,7 @@ import { cn } from "@/utils/cn";
 import { WalletMultiButton } from "@solana/wallet-adapter-react-ui";
 import { useConnection, useWallet } from "@solana/wallet-adapter-react";
 import { LAMPORTS_PER_SOL } from "@solana/web3.js";
+import { createFungibleToken } from "@/utils/libs/libs";
 
 export function TokenCreationForm() {
   const tokenName = useRef<HTMLInputElement>(null);
@@ -16,6 +17,7 @@ export function TokenCreationForm() {
   const [tokenSymbolValue, setTokenSymbolValue] = useState("");
   const [tokenDescriptionValue, setTokenDescriptionValue] = useState("");
   const [balance, setBalance] = useState(0);
+  const [mint, setMint] = useState("");
 
   const { connection } = useConnection();
   const wallet = useWallet();
@@ -43,6 +45,8 @@ export function TokenCreationForm() {
         alert("0 balance");
       }
     });
+
+    const mnt = await createFungibleToken(connection, wallet.wallet) // need a signer
   };
   return (
     <div className="max-w-md w-full mx-auto my-28 rounded-none md:rounded-2xl p-4 md:p-8 shadow-input bg-white dark:bg-black">
@@ -54,7 +58,9 @@ export function TokenCreationForm() {
         Launch you token on Solana blockchain in minutes!
       </p>
       <WalletMultiButton />
-      {balance && <div className=" my-3 text-white">Wallet Balance: {balance}</div>}
+      {balance && (
+        <div className=" my-3 text-white">Wallet Balance: {balance}</div>
+      )}
       <form className="my-8" onSubmit={handleSubmit}>
         <div className="flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-2 mb-4">
           <LabelInputContainer>
