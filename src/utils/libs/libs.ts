@@ -1,4 +1,7 @@
-import { createMint } from "@solana/spl-token";
+import {
+  createMint,
+  getOrCreateAssociatedTokenAccount,
+} from "@solana/spl-token";
 import { Connection, PublicKey, Signer } from "@solana/web3.js";
 
 export async function createFungibleToken(
@@ -10,4 +13,20 @@ export async function createFungibleToken(
   const mint = createMint(connection, payer, mintAuthority, null, decimals);
 
   return (await mint).toBase58();
+}
+
+export async function mintTokens(
+  connection: Connection,
+  payer: Signer,
+  mint: PublicKey
+) {
+  const tokenAccount = await getOrCreateAssociatedTokenAccount(
+    connection,
+    payer,
+    mint,
+    new PublicKey(payer.publicKey)
+  );
+
+  console.log("Token Account: ", tokenAccount.address.toBase58());
+  // 7UX2i7SucgLMQcfZ75s3VXmZZY4YRUyJN9X1RgfMoDUi
 }
