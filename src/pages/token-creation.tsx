@@ -23,15 +23,15 @@ const Token = () => {
     [network]
   );
   return (
-    <ConnectionProvider endpoint={endpoint}>
-      <WalletProvider wallets={wallets}>
-        <WalletModalProvider>
-          <div className=" flex flex-col min-h-screen bg-[#0C0C0C] items-center justify-center">
-            <TokenCreationForm />
-          </div>
-        </WalletModalProvider>
-      </WalletProvider>
-    </ConnectionProvider>
+    // <ConnectionProvider endpoint={endpoint}>
+    //   <WalletProvider wallets={wallets}>
+    //     <WalletModalProvider>
+    <div className=" flex flex-col min-h-screen bg-[#0C0C0C] items-center justify-center">
+      <TokenCreationForm />
+    </div>
+    //     </WalletModalProvider>
+    //   </WalletProvider>
+    // </ConnectionProvider>
   );
 };
 
