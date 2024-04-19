@@ -67,10 +67,16 @@ export async function mintTokens(
   );
 }
 
+/**
+ * Retrieves information about all tokens owned by a specific public key.
+ * @param {Connection} connection - The connection to the Solana blockchain.
+ * @param {PublicKey} owner - The public key of the owner whose tokens are to be retrieved.
+ * @returns {Promise<void>} - A promise that resolves when the token information retrieval is complete.
+ */
 export async function getAllOwnedTokenInfo(
   connection: Connection,
   owner: PublicKey
-) {
+): Promise<void> {
   const tokenAccounts = await connection.getTokenAccountsByOwner(
     new PublicKey("8YLKoCu7NwqHNS8GzuvA2ibsvLrsg22YMfMDafxh1B15"),
     {
@@ -85,6 +91,14 @@ export async function getAllOwnedTokenInfo(
   });
 }
 
+/**
+ * Transfers a specified amount of SPL tokens from one account to another.
+ * @param {Connection} connection - The connection to the Solana blockchain.
+ * @param {Keypair} fromWallet - The keypair of the wallet from which tokens will be transferred.
+ * @param {PublicKey} toWallet - The public key of the wallet to which tokens will be transferred.
+ * @param {PublicKey} mint - The public key of the mint associated with the tokens being transferred.
+ * @returns {Promise<TransactionSignature>} - A promise that resolves to the transaction signature of the transfer.
+ */
 export async function transferSplToken(
   connection: Connection,
   fromWallet: Keypair,
