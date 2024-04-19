@@ -13,7 +13,7 @@ import {
   TransactionConfirmationStrategy,
   PublicKey,
 } from "@solana/web3.js";
-import { createFungibleToken } from "@/utils/libs/libs";
+import { createFungibleToken, mintTokens } from "@/utils/libs/libs";
 
 export function TokenCreationForm() {
   const tokenName = useRef<HTMLInputElement>(null);
@@ -26,18 +26,20 @@ export function TokenCreationForm() {
   const [tokenDescriptionValue, setTokenDescriptionValue] = useState("");
   const [numOfTokensToMintValue, setNumOfTokensToMintValue] = useState(0);
   const [balance, setBalance] = useState(0);
-  const [mint, setMint] = useState("");
+  const [mint, setMint] = useState<PublicKey | undefined>();
   const [payer, setPayer] = useState<Keypair | undefined>();
 
   if (!process.env.NEXT_PUBLIC_RPC_ENDPOINT) {
     return <div>RPC not loaded</div>;
   }
 
-  const connection = new Connection(process.env.NEXT_PUBLIC_RPC_ENDPOINT);
+  // const connection = new Connection(process.env.NEXT_PUBLIC_RPC_ENDPOINT);
+  const connection = new Connection(clusterApiUrl("devnet"), "confirmed");
 
   const handleGeneratePayer = async () => {
     const kp = Keypair.generate();
     setPayer(kp);
+    alert("Wallet created!");
 
     // airdrop sol
     // const airdropSignature = await connection.requestAirdrop(
@@ -53,8 +55,10 @@ export function TokenCreationForm() {
     //   signature: airdropSignature,
     // });
 
+    // // Alert user after successful airdrop
+    // alert("Airdrop Successful");
+
     console.log("Wallet Address:", kp.publicKey.toBase58());
-    alert("Wallet created!");
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -81,10 +85,22 @@ export function TokenCreationForm() {
     );
 
     if (mnt) {
-      console.log("Token created:", mnt);
+      console.log("Token created:", mnt.toBase58());
       setMint(mnt);
     }
   };
+
+  const handleMint = async () => {
+    if (!payer) {
+      throw new Error("payer not set");
+    }
+
+    if (!mint) {
+      throw new Error("Mint not set");
+    }
+    await mintTokens(connection, payer, mint);
+  };
+
   return (
     <div className="max-w-md w-full mx-auto my-28 rounded-none md:rounded-2xl p-4 md:p-8 shadow-input bg-white dark:bg-black">
       <h2 className="font-bold text-xl text-neutral-800 dark:text-neutral-200">
@@ -99,6 +115,13 @@ export function TokenCreationForm() {
         onClick={handleGeneratePayer}
       >
         Generate Signer
+        <BottomGradient />
+      </button>
+      <button
+        className="bg-gradient-to-br relative group/btn from-black dark:from-zinc-900 dark:to-zinc-900 to-neutral-600 block dark:bg-zinc-800 w-full text-white rounded-md h-10 font-medium shadow-[0px_1px_0px_0px_#ffffff40_inset,0px_-1px_0px_0px_#ffffff40_inset] dark:shadow-[0px_1px_0px_0px_var(--zinc-800)_inset,0px_-1px_0px_0px_var(--zinc-800)_inset]"
+        onClick={handleMint}
+      >
+        Mint
         <BottomGradient />
       </button>
       {payer && (

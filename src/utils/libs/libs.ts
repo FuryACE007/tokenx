@@ -12,7 +12,7 @@ export async function createFungibleToken(
 ) {
   const mint = createMint(connection, payer, mintAuthority, null, decimals);
 
-  return (await mint).toBase58();
+  return await mint;
 }
 
 export async function mintTokens(
