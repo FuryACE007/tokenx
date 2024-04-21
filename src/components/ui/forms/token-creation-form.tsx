@@ -98,7 +98,8 @@ export function TokenCreationForm() {
     if (!mint) {
       throw new Error("Mint not set");
     }
-    await mintTokens(connection, payer, mint);
+    const mintAmt = Number(numOfTokensToMint.current?.value) || 0
+    await mintTokens(connection, payer, mint, mintAmt);
   };
 
   return (

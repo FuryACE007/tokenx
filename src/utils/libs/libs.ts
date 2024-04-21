@@ -42,12 +42,14 @@ export async function createFungibleToken(
  * @param {Connection} connection - The connection to the Solana blockchain.
  * @param {Signer} payer - The payer's keypair.
  * @param {PublicKey} mint - The public key of the mint.
+ * @param {number} amt - Number of tokens to mint.
  * @returns {Promise<void>} - A promise that resolves when the minting is complete.
  */
 export async function mintTokens(
   connection: Connection,
   payer: Signer,
-  mint: PublicKey
+  mint: PublicKey,
+  amt: number
 ): Promise<void> {
   const tokenAccount = await getOrCreateAssociatedTokenAccount(
     connection,
@@ -63,8 +65,10 @@ export async function mintTokens(
     mint,
     tokenAccount.address,
     new PublicKey(payer.publicKey),
-    100000000000 // because decimals for the mint are set to 9
+    amt * 100000000000 // because decimals for the mint are set to 9
   );
+  console.log("Minted successfully");
+  
 }
 
 /**
