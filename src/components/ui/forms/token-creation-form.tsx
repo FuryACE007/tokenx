@@ -13,13 +13,18 @@ import {
   TransactionConfirmationStrategy,
   PublicKey,
 } from "@solana/web3.js";
-import { createFungibleToken, mintTokens } from "@/utils/libs/libs";
+import {
+  createFungibleToken,
+  mintTokens,
+  transferSplToken,
+} from "@/utils/libs/libs";
 
 export function TokenCreationForm() {
   const tokenName = useRef<HTMLInputElement>(null);
   const tokenSymbol = useRef<HTMLInputElement>(null);
   const tokenDescription = useRef<HTMLInputElement>(null);
   const numOfTokensToMint = useRef<HTMLInputElement>(null);
+  const numOfTokensToSend = useRef<HTMLInputElement>(null);
 
   const [tokenNameValue, setTokenNameValue] = useState("");
   const [tokenSymbolValue, setTokenSymbolValue] = useState("");
@@ -98,8 +103,23 @@ export function TokenCreationForm() {
     if (!mint) {
       throw new Error("Mint not set");
     }
-    const mintAmt = Number(numOfTokensToMint.current?.value) || 0
+    const mintAmt = Number(numOfTokensToMint.current?.value) || 0;
     await mintTokens(connection, payer, mint, mintAmt);
+  };
+  const handleTokenTransfer = async () => {
+    if (!payer) {
+      throw new Error("payer not set");
+    }
+
+    if (!mint) {
+      throw new Error("Mint not set");
+    }
+    const tokenAmt = Number(numOfTokensToSend.current?.value) || 0;
+    const toWallet = new PublicKey(
+      "3moPQrUksj91Pu1LWCAWH8FzQEEQocwBbMCmC1Rc1EaM"
+    );
+    await transferSplToken(connection, payer, toWallet, mint, tokenAmt);
+    console.log("transfer successful");
   };
 
   return (
@@ -182,6 +202,27 @@ export function TokenCreationForm() {
               ref={numOfTokensToMint}
             />
           </LabelInputContainer>
+        )}
+        <div className="bg-gradient-to-r from-transparent via-neutral-300 dark:via-neutral-700 to-transparent my-8 h-[1px] w-full" />
+        {mint && (
+          <div>
+            <LabelInputContainer className="mb-4">
+              <Label htmlFor="token">Number of Tokens To Send</Label>
+              <Input
+                id="token"
+                placeholder="No of tokens"
+                type="text"
+                ref={numOfTokensToSend}
+              />
+            </LabelInputContainer>
+            <button
+              className="bg-gradient-to-br relative group/btn from-black dark:from-zinc-900 dark:to-zinc-900 to-neutral-600 block dark:bg-zinc-800 w-full text-white rounded-md h-10 font-medium shadow-[0px_1px_0px_0px_#ffffff40_inset,0px_-1px_0px_0px_#ffffff40_inset] dark:shadow-[0px_1px_0px_0px_var(--zinc-800)_inset,0px_-1px_0px_0px_var(--zinc-800)_inset]"
+              onClick={handleTokenTransfer}
+            >
+              Mint
+              <BottomGradient />
+            </button>
+          </div>
         )}
 
         <div className="bg-gradient-to-r from-transparent via-neutral-300 dark:via-neutral-700 to-transparent my-8 h-[1px] w-full" />

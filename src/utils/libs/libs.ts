@@ -68,7 +68,6 @@ export async function mintTokens(
     amt * 100000000000 // because decimals for the mint are set to 9
   );
   console.log("Minted successfully");
-  
 }
 
 /**
@@ -107,7 +106,8 @@ export async function transferSplToken(
   connection: Connection,
   fromWallet: Keypair,
   toWallet: PublicKey,
-  mint: PublicKey
+  mint: PublicKey,
+  amt: number
 ) {
   const fromTokenAccount = await getOrCreateAssociatedTokenAccount(
     connection,
@@ -125,23 +125,25 @@ export async function transferSplToken(
   );
 
   // Mint 1 new token to the "fromTokenAccount" account we just created
-  let signature = await mintTo(
-    connection,
-    fromWallet,
-    mint,
-    fromTokenAccount.address,
-    fromWallet.publicKey,
-    1000000000
-  );
-  console.log("mint tx:", signature);
+  // let signature = await mintTo(
+  //   connection,
+  //   fromWallet,
+  //   mint,
+  //   fromTokenAccount.address,
+  //   fromWallet.publicKey,
+  //   1000000000 * amt
+  // );
+  // console.log("mint tx:", signature);
 
-  // Transfer the new token to the "toTokenAccount" we just created
-  signature = await transfer(
+  // Transfer the token to the "toTokenAccount" we just created
+  let signature = await transfer(
     connection,
     fromWallet,
     fromTokenAccount.address,
     toTokenAccount.address,
     fromWallet.publicKey,
-    50
+    amt
   );
+
+  console.log("transfer tx: ", signature);
 }
