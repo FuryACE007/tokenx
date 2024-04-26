@@ -1,4 +1,4 @@
-import '../styles/globals.css';
+import '../../app/globals.css';
 import { useMemo } from 'react';
 import { WalletProvider } from '@solana/wallet-adapter-react';
 import { WalletModalProvider } from '@solana/wallet-adapter-react-ui';
