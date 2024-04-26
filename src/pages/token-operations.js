@@ -16,6 +16,7 @@ const TokenOperations = () => {
     const fetchTokens = async () => {
       if (publicKey) {
         try {
+          console.log('Fetching tokens for publicKey:', publicKey.toBase58());
           const accounts = await connection.getParsedProgramAccounts(
             TOKEN_PROGRAM_ID,
             {
@@ -32,6 +33,7 @@ const TokenOperations = () => {
               ],
             }
           );
+          console.log('Fetched accounts:', accounts);
           const tokensData = accounts.value.map((account) => {
             const { mint, tokenAmount } = account.account.data.parsed.info;
             return {
@@ -42,6 +44,7 @@ const TokenOperations = () => {
               symbol: '???',
             };
           });
+          console.log('Mapped tokens data:', tokensData);
           setTokens(tokensData);
         } catch (error) {
           console.error('Error fetching tokens:', error);
