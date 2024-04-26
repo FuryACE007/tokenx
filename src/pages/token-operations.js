@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import CreateTokenForm from '../components/CreateTokenForm';
 import MintTokenForm from '../components/MintTokenForm';
 import SendTokenForm from '../components/SendTokenForm';
@@ -8,54 +8,31 @@ import { PublicKey, Connection } from '@solana/web3.js';
 
 const TokenOperations = () => {
   const [activeForm, setActiveForm] = useState('');
-  const [tokens, setTokens] = useState([]);
+  // Simulate fetched tokens with mock data
+  const [tokens, setTokens] = useState([
+    {
+      address: 'MockTokenAddress1',
+      balance: '100',
+      name: 'MockToken1',
+      symbol: 'MTK1'
+    },
+    {
+      address: 'MockTokenAddress2',
+      balance: '200',
+      name: 'MockToken2',
+      symbol: 'MTK2'
+    }
+  ]);
   const { connection } = useConnection();
-  const { publicKey } = useWallet();
+  // Simulate a connected wallet with a mock publicKey
+  const mockPublicKey = useMemo(() => new PublicKey('BpfQjQyFJG8Uc1jRZcX1sDf9E1hphz6GH8DqUnR5dZXE'), []);
 
   useEffect(() => {
-    const fetchTokens = async () => {
-      if (publicKey) {
-        try {
-          console.log('Fetching tokens for publicKey:', publicKey.toBase58());
-          const accounts = await connection.getParsedProgramAccounts(
-            TOKEN_PROGRAM_ID,
-            {
-              filters: [
-                {
-                  dataSize: 165, // The size of SPL Token accounts
-                },
-                {
-                  memcmp: {
-                    offset: 32, // Offset to the start of the mint address
-                    bytes: publicKey.toBase58(), // Your base58-encoded wallet address
-                  },
-                },
-              ],
-            }
-          );
-          console.log('Fetched accounts:', accounts);
-          const tokensData = accounts.map((account) => {
-            const { mint, tokenAmount } = account.account.data.parsed.info;
-            return {
-              address: mint,
-              balance: tokenAmount.uiAmountString,
-              // Placeholder for name and symbol as they require additional metadata fetching
-              name: `Token at ${mint.toString().slice(0, 4)}...${mint.toString().slice(-4)}`,
-              symbol: '???',
-            };
-          });
-          console.log('Mapped tokens data:', tokensData);
-          setTokens(tokensData);
-        } catch (error) {
-          console.error('Error fetching tokens:', error);
-        }
-      } else {
-        console.log('Public key is not available. Wallet might not be connected.');
-      }
-    };
-
-    fetchTokens();
-  }, [publicKey, connection]);
+    // Simulate fetching tokens for the publicKey
+    console.log('Simulating fetchTokens for publicKey:', mockPublicKey.toBase58());
+    // Normally, you would fetch tokens from the blockchain
+    // For simulation purposes, we're using the mock data provided above
+  }, [mockPublicKey, connection]);
 
   const handleButtonClick = (formName) => {
     setActiveForm(formName);
