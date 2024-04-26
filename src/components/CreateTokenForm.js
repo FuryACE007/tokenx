@@ -13,19 +13,20 @@ const CreateTokenForm = () => {
       // Connect to the cluster
       const connection = new Connection(clusterApiUrl('devnet'), 'confirmed');
 
-      // Add here the logic to create a new token using Metaplex
-      // This is a simplified example assuming the wallet is already connected
-      // and the payer is the wallet public key
-      const payer = new PublicKey('Your_Wallet_Public_Key'); // Replace with actual wallet public key
-      const mint = await createMint(
-        connection,
-        payer, // payer
-        payer, // mintAuthority
-        null, // freezeAuthority (null if there isn't one)
-        9 // decimals
-      );
+      // Simulate token creation logic
+      console.log('Simulating token creation with the following details:', { tokenName, tokenSymbol, initialSupply });
 
-      console.log('Token creation submitted:', { tokenName, tokenSymbol, initialSupply, mint });
+      // Placeholder for actual token creation logic
+      // const payer = new PublicKey('Actual_Wallet_Public_Key'); // Replace with actual wallet public key
+      // const mint = await createMint(
+      //   connection,
+      //   payer, // payer
+      //   payer, // mintAuthority
+      //   null, // freezeAuthority (null if there isn't one)
+      //   9 // decimals
+      // );
+
+      // console.log('Token creation submitted:', { tokenName, tokenSymbol, initialSupply, mint });
     } catch (error) {
       console.error('Error creating token:', error);
     }
