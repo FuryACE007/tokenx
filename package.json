@@ -16,6 +16,8 @@
     "@metaplex-foundation/umi-uploader-irys": "^0.9.1",
     "@solana/spl-token": "^0.4.6",
     "@solana/wallet-adapter-react": "^0.15.35",
+    "@solana/wallet-adapter-react-ui": "^0.9.35",
+    "@solana/wallet-adapter-wallets": "^0.19.32",
     "clsx": "^2.1.1",
     "framer-motion": "^11.1.7",
     "next": "14.2.3",
