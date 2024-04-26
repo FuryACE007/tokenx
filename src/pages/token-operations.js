@@ -34,7 +34,7 @@ const TokenOperations = () => {
             }
           );
           console.log('Fetched accounts:', accounts);
-          const tokensData = accounts.value.map((account) => {
+          const tokensData = accounts.map((account) => {
             const { mint, tokenAmount } = account.account.data.parsed.info;
             return {
               address: mint,
@@ -49,6 +49,8 @@ const TokenOperations = () => {
         } catch (error) {
           console.error('Error fetching tokens:', error);
         }
+      } else {
+        console.log('Public key is not available. Wallet might not be connected.');
       }
     };
 
