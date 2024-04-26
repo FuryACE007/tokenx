@@ -1,6 +1,17 @@
 import React, { useState } from 'react';
 import { Connection, PublicKey, clusterApiUrl } from '@solana/web3.js';
-import { createMint } from '@solana/spl-token';
+import { Keypair } from '@solana/web3.js';
+import { createFungible } from '@metaplex-foundation/mpl-token-metadata';
+import { toast } from 'react-toastify';
+
+// Mock function to simulate metadata upload and return a URI
+// This should be replaced with actual logic to upload metadata to a hosting service
+async function uploadMetadata(tokenName, tokenSymbol) {
+  // Simulate a delay for the upload process
+  await new Promise(resolve => setTimeout(resolve, 1000));
+  // Return a mock URI
+  return `https://example.com/metadata/${encodeURIComponent(tokenName)}-${encodeURIComponent(tokenSymbol)}.json`;
+}
 
 const CreateTokenForm = () => {
   const [tokenName, setTokenName] = useState('');
@@ -13,22 +24,29 @@ const CreateTokenForm = () => {
       // Connect to the cluster
       const connection = new Connection(clusterApiUrl('devnet'), 'confirmed');
 
-      // Simulate token creation logic
-      console.log('Simulating token creation with the following details:', { tokenName, tokenSymbol, initialSupply });
+      // Generate a new keypair for the mint
+      const mint = Keypair.generate();
 
-      // Placeholder for actual token creation logic
-      // const payer = new PublicKey('Actual_Wallet_Public_Key'); // Replace with actual wallet public key
-      // const mint = await createMint(
-      //   connection,
-      //   payer, // payer
-      //   payer, // mintAuthority
-      //   null, // freezeAuthority (null if there isn't one)
-      //   9 // decimals
-      // );
+      // Upload the token metadata and get the URI
+      const metadataUri = await uploadMetadata(tokenName, tokenSymbol);
 
-      // console.log('Token creation submitted:', { tokenName, tokenSymbol, initialSupply, mint });
+      // Create the fungible token
+      await createFungible(connection, {
+        mint: mint.publicKey,
+        name: tokenName,
+        symbol: tokenSymbol,
+        uri: metadataUri,
+        sellerFeeBasisPoints: 500, // 5%
+        isMutable: true,
+        creators: null,
+        payer: mint,
+      });
+
+      toast.success('Token created successfully!');
+      console.log('Token creation submitted:', { tokenName, tokenSymbol, initialSupply, mint: mint.publicKey.toString() });
     } catch (error) {
       console.error('Error creating token:', error);
+      toast.error('Failed to create token.');
     }
   };
 
