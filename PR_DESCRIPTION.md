@@ -1,3 +1,3 @@
-Update next.config.js for static export and adjust package.json
+Merge resolved changes from 'new-merge-resolution' into 'main'
 
-This pull request includes changes to next.config.js to enable static export as per the latest Next.js documentation. Additionally, the package.json file has been updated to include the export script.
+This pull request includes the changes that resolve the merge conflicts between the 'develop' and 'main' branches, ensuring that the 'main' branch is up-to-date with the latest developments.
