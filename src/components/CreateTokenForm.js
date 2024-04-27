@@ -1,10 +1,10 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useContext } from 'react';
 import { Connection, PublicKey, clusterApiUrl } from '@solana/web3.js';
 import { Keypair } from '@solana/web3.js';
 import { createFungible } from '@metaplex-foundation/mpl-token-metadata';
 import { toast } from 'react-toastify';
 import { Umi, createUmi } from '@metaplex-foundation/umi';
-import { ProgramRepository } from '../contexts/ProgramRepository'; // Import the ProgramRepository
+import { UmiContext } from '../contexts/UmiContext'; // Import UmiContext
 
 // Function to simulate metadata upload to Arweave and return the URI
 async function uploadMetadataToArweave(metadata) {
@@ -26,32 +26,27 @@ const CreateTokenForm = () => {
   const [tokenSymbol, setTokenSymbol] = useState('');
   const [initialSupply, setInitialSupply] = useState('');
   const umiRef = useRef(null);
+  const umiContext = useContext(UmiContext);
 
   useEffect(() => {
-    // Initialize Umi instance
-    const umi = createUmi(clusterApiUrl('devnet'));
-    console.log('Umi instance:', umi); // Log the Umi instance
-
-    // Manually initialize the context if it's not already set by createUmi
-    if (!umi.context) {
-      umi.context = {};
+    // Check if the Umi instance is already provided in the context
+    if (!umiContext.umi) {
+      console.error('Umi instance is not provided in UmiContext');
+      return;
     }
 
-    // Ensure the Umi context is correctly set with the ProgramRepository
-    if (!umi.context.programs) {
-      umi.context.programs = new ProgramRepository();
-    }
-    console.log('Umi context after setting programs:', umi.context); // Log the Umi context
+    // Use the provided Umi instance from the context
+    umiRef.current = umiContext.umi;
 
-    // Assign the Umi instance to the ref
-    umiRef.current = umi;
+    // Log the Umi instance to verify it is correctly obtained from the context
+    console.log('Umi instance from context:', umiRef.current);
 
     // Cleanup function if needed for component unmount
     return () => {
       // Perform any cleanup operations
       umiRef.current = null;
     };
-  }, []);
+  }, [umiContext]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -82,9 +77,9 @@ const CreateTokenForm = () => {
       metadata.data.uri = metadataUri;
 
       // Ensure the Umi context is correctly set with the ProgramRepository
-      if (!umiRef.current.context.programs) {
-        console.error('Programs property is not set in the Umi context.');
-        throw new Error('Programs property is not set in the Umi context.');
+      if (!umiRef.current || !umiRef.current.context || !umiRef.current.context.programs) {
+        console.error('Umi instance or programs property is not set in the Umi context.');
+        throw new Error('Umi instance or programs property is not set in the Umi context.');
       }
 
       // Log the Umi context programs property before creating the fungible token
