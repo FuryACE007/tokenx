@@ -83,15 +83,12 @@ const CreateTokenForm = () => {
 
       // Ensure the Umi context is correctly set with the ProgramRepository
       if (!umiRef.current.context.programs) {
-        umiRef.current.context.programs = new ProgramRepository();
+        console.error('Programs property is not set in the Umi context.');
+        throw new Error('Programs property is not set in the Umi context.');
       }
 
       // Log the Umi context programs property before creating the fungible token
       console.log('Umi context programs property before createFungible:', umiRef.current.context.programs);
-      if (!umiRef.current.context.programs) {
-        console.error('Programs property is not set in the Umi context.');
-        throw new Error('Programs property is not set in the Umi context.');
-      }
 
       // Create the fungible token
       await createFungible(umiRef.current, {
