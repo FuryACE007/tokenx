@@ -38,7 +38,7 @@ const CreateTokenForm = () => {
       // Initialize Umi instance
       const umi = createUmi(clusterApiUrl('devnet'));
       const programRepository = new ProgramRepository(); // Instantiate the ProgramRepository
-      umi.context = { programs: programRepository }; // Correctly set the 'programs' property in the Umi context
+      umi.context.programs = programRepository; // Correctly set the 'programs' property in the Umi context
 
       // Prepare the token metadata
       const metadata = {
