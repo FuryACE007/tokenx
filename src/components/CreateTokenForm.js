@@ -81,6 +81,11 @@ const CreateTokenForm = () => {
       // Update metadata with the actual URI
       metadata.data.uri = metadataUri;
 
+      // Ensure the Umi context is correctly set with the ProgramRepository
+      if (!umiRef.current.context.programs) {
+        umiRef.current.context.programs = new ProgramRepository();
+      }
+
       // Log the Umi context programs property before creating the fungible token
       console.log('Umi context programs property before createFungible:', umiRef.current.context.programs);
       if (!umiRef.current.context.programs) {
