@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect } from 'react';
 import CreateTokenForm from '../components/CreateTokenForm';
 import MintTokenForm from '../components/MintTokenForm';
 import SendTokenForm from '../components/SendTokenForm';
@@ -8,31 +8,18 @@ import { PublicKey, Connection } from '@solana/web3.js';
 
 const TokenOperations = () => {
   const [activeForm, setActiveForm] = useState('');
-  // Simulate fetched tokens with mock data
-  const [tokens, setTokens] = useState([
-    {
-      address: 'MockTokenAddress1',
-      balance: '100',
-      name: 'MockToken1',
-      symbol: 'MTK1'
-    },
-    {
-      address: 'MockTokenAddress2',
-      balance: '200',
-      name: 'MockToken2',
-      symbol: 'MTK2'
-    }
-  ]);
+  const [tokens, setTokens] = useState([]);
   const { connection } = useConnection();
-  // Simulate a connected wallet with a mock publicKey
-  const mockPublicKey = useMemo(() => new PublicKey('BpfQjQyFJG8Uc1jRZcX1sDf9E1hphz6GH8DqUnR5dZXE'), []);
+  const { publicKey } = useWallet();
 
   useEffect(() => {
-    // Simulate fetching tokens for the publicKey
-    console.log('Simulating fetchTokens for publicKey:', mockPublicKey.toBase58());
-    // Normally, you would fetch tokens from the blockchain
-    // For simulation purposes, we're using the mock data provided above
-  }, [mockPublicKey, connection]);
+    if (publicKey) {
+      // Fetch tokens for the connected wallet's publicKey
+      console.log('Fetching tokens for publicKey:', publicKey.toBase58());
+      // TODO: Implement the logic to fetch tokens from the blockchain
+      // setTokens(fetchedTokens);
+    }
+  }, [publicKey, connection]);
 
   const handleButtonClick = (formName) => {
     setActiveForm(formName);
