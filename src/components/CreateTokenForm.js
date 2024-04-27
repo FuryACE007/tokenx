@@ -102,6 +102,9 @@ const CreateTokenForm = () => {
         payer: umiRef.current.identity, // Use umi.identity as the payer
       });
 
+      // Log the state of the Umi context programs property after createFungible
+      console.log('Umi context programs property after createFungible:', umiRef.current.context.programs);
+
       toast.success('Token created successfully!');
       console.log('Token creation submitted:', { tokenName, tokenSymbol, initialSupply, mint: mint.publicKey.toString() });
     } catch (error) {
