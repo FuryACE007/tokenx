@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Connection, PublicKey, clusterApiUrl } from '@solana/web3.js';
 import { Keypair } from '@solana/web3.js';
 import { createFungible } from '@metaplex-foundation/mpl-token-metadata';
@@ -27,16 +27,31 @@ const CreateTokenForm = () => {
   const [initialSupply, setInitialSupply] = useState('');
   const umiRef = useRef(null);
 
-  if (!umiRef.current) {
+  useEffect(() => {
     // Initialize Umi instance
-    umiRef.current = createUmi(clusterApiUrl('devnet'));
-    console.log('Umi instance:', umiRef.current); // Log the Umi instance
-    const programRepository = new ProgramRepository(); // Instantiate the ProgramRepository
-    console.log('ProgramRepository instance:', programRepository); // Log the ProgramRepository instance
-    umiRef.current.context = umiRef.current.context || {}; // Ensure context property exists
-    umiRef.current.context.programs = programRepository; // Correctly set the 'programs' property in the Umi context
-    console.log('Umi context after setting programs:', umiRef.current.context); // Log the Umi context
-  }
+    const umi = createUmi(clusterApiUrl('devnet'));
+    console.log('Umi instance:', umi); // Log the Umi instance
+
+    // Manually initialize the context if it's not already set by createUmi
+    if (!umi.context) {
+      umi.context = {};
+    }
+
+    // Ensure the Umi context is correctly set with the ProgramRepository
+    if (!umi.context.programs) {
+      umi.context.programs = new ProgramRepository();
+    }
+    console.log('Umi context after setting programs:', umi.context); // Log the Umi context
+
+    // Assign the Umi instance to the ref
+    umiRef.current = umi;
+
+    // Cleanup function if needed for component unmount
+    return () => {
+      // Perform any cleanup operations
+      umiRef.current = null;
+    };
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -66,9 +81,10 @@ const CreateTokenForm = () => {
       // Update metadata with the actual URI
       metadata.data.uri = metadataUri;
 
-      // Ensure the Umi context is correctly set with the ProgramRepository
+      // Log the Umi context programs property before creating the fungible token
       if (!umiRef.current.context.programs) {
-        umiRef.current.context.programs = new ProgramRepository();
+        console.error('Programs property is not set in the Umi context.');
+        throw new Error('Programs property is not set in the Umi context.');
       }
 
       // Create the fungible token
