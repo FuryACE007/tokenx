@@ -34,3 +34,14 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# submodules
+lib/
+
+# Hardhat artifacts
+artifacts/
+cache/
+
+# UI build artifacts
+ui/build/
+ui/node_modules/
